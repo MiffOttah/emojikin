@@ -77,6 +77,23 @@ b { font-size: 30vh; }
   z-index: 310;
 }
 
-.pumkin {
+#pumkin-area {
+  position: fixed;
   z-index: 200;
+  height: 32vh;
+  width: 32vh;
+  left: calc(50vw - 16vh);
+  top: calc(50vh - 16vh);
+}
+@media (orientation: portrait){
+  #pumkin-area {
+    height: 32vw;
+    width: 32vw;
+    left: calc(50vw - 16vw);
+    top: calc(50vh - 16vw);
+  }
+}
+
+.pumkin {
+  z-index: 210;
 }

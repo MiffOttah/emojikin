@@ -6,6 +6,14 @@ function wait(time){
   });
 }
 
+function tweenAdjust(base, diff, speed){
+  if (Math.abs(diff) > speed){
+    return base + (speed * Math.sign(diff));
+  } else {
+    return base + diff;
+  }
+}
+
 function speak(text){
   return new Promise(function(resolve, reject) {
     if (window.speechSynthesis && SpeechSynthesisUtterance){
@@ -53,13 +61,45 @@ function emojiActor(emoji, className){
     this.element.style.left = (position.x - (myBounds.width / 2)) + 'px';
     this.element.style.top = (position.y - (myBounds.height / 2)) + 'px';
   };
+
+  this.tweenTo = function(position, speed){
+    position = getPosition(position);
+    const myPosition = getPosition(this.element);
+    speed = speed || 20;
+
+    return new Promise((resolve, reject) => {
+      if (speed <= 0 || !position){
+        reject();
+        return;
+      }
+
+      //console.log('tween %o from %o to %o', this.element, position, myPosition);
+
+      const tnext = () => {
+        const dX = position.x - myPosition.x;
+        const dY = position.y - myPosition.y;
+
+        if (Math.abs(dX) > speed || Math.abs(dY) > speed){
+          myPosition.x = tweenAdjust(myPosition.x, dX, speed);
+          myPosition.y = tweenAdjust(myPosition.y, dY, speed);
+          this.moveTo(myPosition);
+
+          window.setTimeout(tnext, 100);
+        } else {
+          resolve();
+        }
+      };
+      tnext();
+    });
+  }
 }
 
 window.onload = async function(){
-  await wait(1000);
+  //await wait(1000);
 
   // create pumkin
   const pumkin = new emojiActor(0x1F383, 'pumkin');
   pumkin.moveTo('#door');
   await speak("I'm very hungry!");
+  await pumkin.tweenTo('#pumkin-area');
 };
