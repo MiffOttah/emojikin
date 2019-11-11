@@ -26,6 +26,16 @@ function speak(text){
   });
 }
 
+function asElement(source){
+  if (source instanceof HTMLElement){
+    return source;
+  } else if (typeof(source) === 'string'){
+    return document.querySelector(source);
+  } else {
+    return null;
+  }
+}
+
 function getPosition(source){
   if (!source){
     return null;
@@ -35,7 +45,7 @@ function getPosition(source){
   } else if (source instanceof emojiActor){
     return getPosition(source.element);
   } else if (typeof(source) === 'string') {
-    return getPosition(document.querySelector(source));
+    return getPosition(asElement(source));
   } else if (source.x && source.y){
     return source;
   } else {
@@ -52,20 +62,27 @@ function emojiActor(emoji, className){
     return b;
   })();
 
+  this.inContainer = false;
+
   this.getPosition = function(){ return getPosition(this.element); }
 
   this.moveTo = function(position){
     position = getPosition(position);
     const myBounds = this.element.getBoundingClientRect();
 
+    //console.log('move %o from %o to %o', this.element, myBounds, position);
+
     this.element.style.left = (position.x - (myBounds.width / 2)) + 'px';
     this.element.style.top = (position.y - (myBounds.height / 2)) + 'px';
   };
 
   this.tweenTo = function(position, speed){
+    const container = asElement(position);
     position = getPosition(position);
     const myPosition = getPosition(this.element);
-    speed = speed || 20;
+    speed = speed || 10;
+
+    this.exitContainer();
 
     return new Promise((resolve, reject) => {
       if (speed <= 0 || !position){
@@ -73,7 +90,7 @@ function emojiActor(emoji, className){
         return;
       }
 
-      //console.log('tween %o from %o to %o', this.element, position, myPosition);
+      //console.log('tween %o from %o to %o', this.element, myPosition, position);
 
       const tnext = () => {
         const dX = position.x - myPosition.x;
@@ -84,14 +101,29 @@ function emojiActor(emoji, className){
           myPosition.y = tweenAdjust(myPosition.y, dY, speed);
           this.moveTo(myPosition);
 
-          window.setTimeout(tnext, 100);
+          window.setTimeout(tnext, 50);
         } else {
+          if (container && container.classList.contains('emoji-container')) this.enterContainer(container);
           resolve();
         }
       };
       tnext();
     });
-  }
+  };
+
+  this.enterContainer = function(container){
+    container = container instanceof HTMLElement ? container : document.querySelector(container);
+
+    this.element.parentElement.removeChild(this.element);
+    container.appendChild(this.element);
+    this.inContainer = true;
+  };
+
+  this.exitContainer = function(){
+    this.element.parentElement.removeChild(this.element);
+    document.body.appendChild(this.element);
+    this.inContainer = false;
+  };
 }
 
 window.onload = async function(){

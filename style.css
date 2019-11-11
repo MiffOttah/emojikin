@@ -42,6 +42,15 @@ b { font-size: 30vh; }
   z-index: 400;
 }
 
+.emoji-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emoji-container > .emojiActor {
+  position: static;
+}
+
 #wall {
   position: fixed;
   left: 0;
