@@ -1,0 +1,76 @@
+🍇 Grapes
+🍈 Melon
+🍉 Watermelon
+🍊 Tangerine
+🍋 Lemon
+🍌 Banana
+🍍 Pineapple
+🥭 Mango
+🍎 Apple
+🍐 Pear
+🍑 Peach
+🍒 Cherries
+🍓 Strawberry
+🥝 Kiwi
+🍅 Tomato
+🥥 Coconut
+🥑 Avocado
+🍆 Eggplant
+🥔 Potato
+🥕 Carrot
+🌽 Ear of Corn
+🌶 Hot Pepper
+🥒 Cucumber
+🥦 Broccoli
+🍄 Mushroom
+🥜 Peanuts
+🌰 Chestnut
+🍞 Bread
+🥐 Croissant
+🥖 Baguette
+🥨 Pretzel
+🥯 Bagel
+🥞 Pancakes
+🧀 Cheese Wedge
+🍖 Meat
+🍗 Poultry Leg
+🥓 Bacon
+🍔 Hamburger
+🍟 French Fries
+🍕 Pizza
+🌭 Hot Dog
+🥪 Sandwich
+🌮 Taco
+🌯 Burrito
+🥙 Flatbread
+🥗 Salad
+🍿 Popcorn
+🧂 Salt
+🍘 Rice Cracker
+🍙 Rice Ball
+🍚 Cooked Rice
+🍛 Curry Rice
+🍝 Spaghetti
+🍠 Sweet Potato
+🍢 Oden
+🍣 Sushi
+🍤 Fried Shrimp
+🍥 Fish Cake
+🥮 Moon Cake
+🍡 Dango
+🥟 Dumpling
+🥠 Fortune Cookie
+🍦 Ice Cream
+🍧 Shaved Ice
+🍩 Doughnut
+🍪 Cookie
+🎂 Cake
+🧁 Cupcake
+🥧 Pie
+🍫 Chocolate
+🍬 Candy
+🍭 Lollipop
+🍮 Custard
+🥛 Milk
+🍶 Sake
+🍺 Beer
