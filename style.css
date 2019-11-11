@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-family: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+  vertical-align: baseline;
+  box-sizing: inherit;
+  color: inherit;
+  background: transparent none;
+  cursor: inherit;
+}
+
+html, body {
+  font-size: 12pt;
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  box-sizing: border-box;
+  color: black;
+  background: #dddddd;
+  cursor: default;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
+b { font-size: 30vh; }
+@media (orientation: portrait){
+  b {
+    font-size: 30vw;
+  }
+}
+
+.emojiActor {
+  position: fixed;
+  z-index: 400;
+}
+
+#wall {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 40vh;
+  background: #edd60a;
+  z-index: 100;
+}
+
+#door {
+  position: absolute;
+  left: 10%;
+  bottom: 0;
+  z-index: 110;
+}
+
+#counter, #food-area {
+  background: #1069fe;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 40vh;
+  border-top-left-radius: 20vw 6vw;
+  border-top-right-radius: 20vw 6vw;
+  z-index: 300;
+}
+
+#food-area {
+  background: #888;
+  height: 30vh;
+  z-index: 310;
+}
+
+.pumkin {
+  z-index: 200;
+}
