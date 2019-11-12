@@ -18,8 +18,7 @@
 🍆 Eggplant
 🥔 Potato
 🥕 Carrot
-🌽 Ear of Corn
-🌶 Hot Pepper
+🌽 Corn
 🥒 Cucumber
 🥦 Broccoli
 🍄 Mushroom
@@ -31,9 +30,9 @@
 🥨 Pretzel
 🥯 Bagel
 🥞 Pancakes
-🧀 Cheese Wedge
+🧀 Cheese
 🍖 Meat
-🍗 Poultry Leg
+🍗 Chicken
 🥓 Bacon
 🍔 Hamburger
 🍟 French Fries
@@ -48,7 +47,7 @@
 🧂 Salt
 🍘 Rice Cracker
 🍙 Rice Ball
-🍚 Cooked Rice
+🍚 Rice
 🍛 Curry Rice
 🍝 Spaghetti
 🍠 Sweet Potato
@@ -72,5 +71,5 @@
 🍭 Lollipop
 🍮 Custard
 🥛 Milk
-🍶 Sake
+🍶 Sock a
 🍺 Beer
