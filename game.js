@@ -243,13 +243,11 @@ window.onload = async function(){
       choices = [0, 1, 2, 3];
     }
 
-    console.log("Choices: %o", choices);
     const correctChoice = randomOf(choices);
-    console.log("Correct choice: %o (%o)", correctChoice, foodStatus[correctChoice]);
 
     const afa = document.getElementById('active-food-area');
 
-    await speak("Give me the " + foodStatus[correctChoice][1]);
+    speak("Give me the " + foodStatus[correctChoice][1]); // don't await, run in background
     const playerChoice = await foodChoiceHandler.getChoice();
 
     await foodActors[playerChoice].tweenTo(afa);
