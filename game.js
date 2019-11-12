@@ -6,6 +6,17 @@ function wait(time){
   });
 }
 
+function randomOf(a){
+  return a[Math.floor(Math.random() * a.length)];
+}
+
+Array.prototype.indexTest = function(test){
+  for (let i = 0; i < this.length; i++){
+    if (test(this[i])) return i;
+  }
+  return -1;
+};
+
 function tweenAdjust(base, diff, speed){
   if (Math.abs(diff) > speed){
     return base + (speed * Math.sign(diff));
@@ -124,6 +135,10 @@ function emojiActor(emoji, className){
     document.body.appendChild(this.element);
     this.inContainer = false;
   };
+
+  this.clear = function(){
+    this.element.parentElement.removeChild(this.element);
+  }
 }
 
 window.onload = async function(){
@@ -134,4 +149,49 @@ window.onload = async function(){
   pumkin.moveTo('#door');
   await speak("I'm very hungry!");
   await pumkin.tweenTo('#pumkin-area');
+
+  // create food areas
+  const foodStatus = [null, null, null, null];
+  const foodActors = [null, null, null, null];
+  const foodContainers = [null, null, null, null];
+
+  for (let i = 0; i < 4; i++){
+    foodContainers[i] = document.createElement('div');
+    foodContainers[i].className = 'food-container emoji-container';
+    document.getElementById('food-area').appendChild(foodContainers[i]);
+  }
+
+  function populateFood(){
+    let i;
+    const r = [];
+    const foodArea = document.getElementById('food-area');
+
+    while ((i = foodStatus.indexTest(f => !f)) != -1){
+      if (foodActors[i]) foodActors[i].clear();
+
+      while (true){
+        let newFood = randomOf(food);
+        if (foodStatus.indexTest(f => f && f[0] === newFood[0])){
+          foodStatus[i] = newFood;
+          foodActors[i] = new emojiActor(newFood[0], 'food');
+
+          const p = getPosition(foodContainers[i]);
+          p.y += foodArea.offsetHeight;
+          foodActors[i].moveTo(p);
+          r.push(foodActors[i].tweenTo(foodContainers[i]));
+          break;
+        }
+      }
+    }
+    return Promise.all(r);
+  }
+
+  async function gameTurn(){
+    await populateFood();
+
+    const choice = Math.floor(Math.random() * 4);
+    await speak("Give me the " + foodStatus[choice][1]);
+  }
+
+  await gameTurn();
 };
