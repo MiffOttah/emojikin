@@ -37,6 +37,27 @@ function speak(text){
   });
 }
 
+const beep = (function(){
+  if (window.AudioContext){
+    const audio = window.AudioContext ? new AudioContext() : null;
+    const gainNode = audio.createGain();
+    gainNode.gain.value = 0.5;
+    gainNode.connect(audio.destination);
+
+    return function(){
+      const oscillator = audio.createOscillator();
+      oscillator.frequency.setValueAtTime(880, audio.currentTime)
+      oscillator.frequency.exponentialRampToValueAtTime(1046.5, audio.currentTime + 0.05)
+      oscillator.connect(gainNode);
+      oscillator.start();
+
+      return wait(100).then(() => oscillator.stop());
+    };
+  } else {
+    return () => new Promise((resolve, reject) => resolve());
+  }
+})();
+
 function asElement(source){
   if (source instanceof HTMLElement){
     return source;
@@ -125,13 +146,13 @@ function emojiActor(emoji, className){
   this.enterContainer = function(container){
     container = container instanceof HTMLElement ? container : document.querySelector(container);
 
-    this.element.parentElement.removeChild(this.element);
+    this.clear();
     container.appendChild(this.element);
     this.inContainer = true;
   };
 
   this.exitContainer = function(){
-    this.element.parentElement.removeChild(this.element);
+    this.clear();
     document.body.appendChild(this.element);
     this.inContainer = false;
   };
@@ -144,7 +165,8 @@ function emojiActor(emoji, className){
 }
 
 window.onload = async function(){
-  //await wait(1000);
+  let score = 0;
+  await wait(600);
 
   // create pumkin
   const pumkin = new emojiActor(0x1F383, 'pumkin');
@@ -221,6 +243,7 @@ window.onload = async function(){
       choices = [0, 1, 2, 3];
     }
 
+    console.log("Choices: %o", choices);
     const correctChoice = randomOf(choices);
     console.log("Correct choice: %o (%o)", correctChoice, foodStatus[correctChoice]);
 
@@ -233,10 +256,12 @@ window.onload = async function(){
     if (playerChoice === correctChoice){
 
       await speak("Nom nom");
-      
 
       foodStatus[correctChoice] = null;
       foodActors[correctChoice].clear();
+      score++;
+      document.getElementById('score').textContent = score;
+      await beep();
 
       gameTurn();
     } else {
@@ -248,9 +273,12 @@ window.onload = async function(){
         foodActors[playerChoice].tweenTo(offScreen, 30)
       ]);
 
+      foodActors[playerChoice].clear();
       foodStatus[playerChoice] = null;
       gameTurn();
     }
+
+    window.getSelection().removeAllRanges();
   }
 
   gameTurn();
