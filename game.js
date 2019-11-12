@@ -137,7 +137,9 @@ function emojiActor(emoji, className){
   };
 
   this.clear = function(){
-    this.element.parentElement.removeChild(this.element);
+    if (this.element.parentElement){
+      this.element.parentElement.removeChild(this.element);
+    }
   }
 }
 
@@ -155,9 +157,28 @@ window.onload = async function(){
   const foodActors = [null, null, null, null];
   const foodContainers = [null, null, null, null];
 
+  const foodChoiceHandler = (function(){
+    let handler = null;
+    function onClick(e){
+      if (handler){
+        handler(+this.getAttribute('data-value'));
+      }
+    }
+
+    function getChoice(){
+      return new Promise(function (resolve, reject){
+        handler = resolve;
+      });
+    }
+
+    return { onClick, getChoice };
+  })();
+
   for (let i = 0; i < 4; i++){
     foodContainers[i] = document.createElement('div');
     foodContainers[i].className = 'food-container emoji-container';
+    foodContainers[i].setAttribute('data-value', i);
+    foodContainers[i].onclick = foodChoiceHandler.onClick;
     document.getElementById('food-area').appendChild(foodContainers[i]);
   }
 
@@ -171,7 +192,7 @@ window.onload = async function(){
 
       while (true){
         let newFood = randomOf(food);
-        if (foodStatus.indexTest(f => f && f[0] === newFood[0])){
+        if (foodStatus.indexTest(f => f && f[0] === newFood[0]) === -1){
           foodStatus[i] = newFood;
           foodActors[i] = new emojiActor(newFood[0], 'food');
 
@@ -187,11 +208,50 @@ window.onload = async function(){
   }
 
   async function gameTurn(){
-    await populateFood();
+    let choices = [];
 
-    const choice = Math.floor(Math.random() * 4);
-    await speak("Give me the " + foodStatus[choice][1]);
+    for (let i = 0; i < 4; i++){
+      if (foodStatus[i]){
+        choices.push(i);
+      }
+    }
+
+    if (choices.length === 0){
+      await populateFood();
+      choices = [0, 1, 2, 3];
+    }
+
+    const correctChoice = randomOf(choices);
+    console.log("Correct choice: %o (%o)", correctChoice, foodStatus[correctChoice]);
+
+    const afa = document.getElementById('active-food-area');
+
+    await speak("Give me the " + foodStatus[correctChoice][1]);
+    const playerChoice = await foodChoiceHandler.getChoice();
+
+    await foodActors[playerChoice].tweenTo(afa);
+    if (playerChoice === correctChoice){
+
+      await speak("Nom nom");
+      
+
+      foodStatus[correctChoice] = null;
+      foodActors[correctChoice].clear();
+
+      gameTurn();
+    } else {
+      const offScreen = getPosition(afa);
+      offScreen.x = document.body.offsetWidth + afa.offsetWidth;
+
+      await Promise.all([
+        speak("No, I don't want that!"),
+        foodActors[playerChoice].tweenTo(offScreen, 30)
+      ]);
+
+      foodStatus[playerChoice] = null;
+      gameTurn();
+    }
   }
 
-  await gameTurn();
+  gameTurn();
 };

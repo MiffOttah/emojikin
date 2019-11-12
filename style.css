@@ -91,20 +91,24 @@ b { font-size: 30vh; }
   left: 0;
   bottom: 0;
   width: 100vw;
-  height: 40vh;
   border-top-left-radius: 20vw 6vw;
   border-top-right-radius: 20vw 6vw;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#counter {
+  align-items: flex-start;
   z-index: 300;
+  height: 40vh;
 }
 
 #food-area {
   background: #888;
   height: 30vh;
   z-index: 310;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
 }
 
@@ -119,6 +123,7 @@ b { font-size: 30vh; }
 }
 .food {
   font-size: 12vh;
+  z-index: 450;
 }
 @media (orientation: portrait){
   .food-container {
@@ -132,4 +137,24 @@ b { font-size: 30vh; }
 
 .food-container > .food {
   cursor: pointer;
+}
+
+#score {
+  font-size: 4vh;
+
+  position: fixed;
+  top: 0.2em;
+  right: 0.2em;
+  width: 4em;
+  padding: 0.2em;
+
+  color: white;
+  background: #ff6633;
+  border: 2px solid #ab6439;
+  border-radius: 0.9em;
+
+  text-align: center;
+  font-style: italic;
+
+  z-index: 600;
 }
